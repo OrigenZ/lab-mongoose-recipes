@@ -15,14 +15,12 @@ const successUppdateHandler = (data) =>
   console.log('\nRecipe: ' + data.title + ' updated\n')
 
 const successDeleteHandler = (data) => {
-  if (data.deletedCount > 0) console.log('\nRecipe successfuly deleted\n')
+  if (data) console.log('\nRecipe successfuly deleted\n')
   else console.log('\nRecipe to be deleted could not be found\n')
 }
 
-
 // Connection to the database "recipe-app"
 const createRecipe = async () => {
-
   try {
     // CONNECT
     await mongoose.connect(MONGODB_URI, {})
@@ -44,9 +42,10 @@ const createRecipe = async () => {
     successUppdateHandler(updatedRecipe)
 
     //DELETING A SINGLE DOCUMENT
-    const deletedRecipe = await Recipe.findOneAndDelete({ title: 'Carrot Cake' })
+    const deletedRecipe = await Recipe.findOneAndDelete({
+      title: 'Carrot Cake',
+    })
     successDeleteHandler(deletedRecipe)
-
   } catch (err) {
     console.log('An error occurred', err.message)
   } finally {
@@ -57,10 +56,10 @@ const createRecipe = async () => {
     // 3: disconnecting
 
     //console.log(mongoose.connection.readyState)
-    if (mongoose.connection.readyState === 1) mongoose.connection.close()
+    //if (mongoose.connection.readyState === 1)
+    mongoose.connection.close()
     //console.log(mongoose.connection.readyState)
   }
-
 }
 
 createRecipe()
